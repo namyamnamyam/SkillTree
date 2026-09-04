@@ -1,0 +1,22 @@
+name: Validate SkillTree
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Check JavaScript syntax
+        run: node --check game.js
+      - name: Verify required files
+        run: test -f index.html && test -f style.css && test -f game.js
