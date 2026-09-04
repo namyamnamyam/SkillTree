@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#090b12" />
+  <title>SKILL//TREE — 성장형 RPG</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <div id="app">
+    <header class="topbar">
+      <button class="brand" data-tab="game" aria-label="홈으로">
+        <span class="brand-mark">S//T</span>
+        <span class="brand-copy"><b>SKILL//TREE</b><small>BUILD YOUR OWN MONSTER</small></span>
+      </button>
+      <div class="resource-strip">
+        <div class="resource"><span>LV</span><b id="hudLevel">1</b></div>
+        <div class="resource wide"><span>EXP</span><b id="hudXp">0 / 100</b></div>
+        <div class="resource accent"><span>SP</span><b id="hudSp">3</b></div>
+        <div class="resource"><span>G</span><b id="hudGold">0</b></div>
+      </div>
+      <button id="menuToggle" class="icon-btn mobile-only">☰</button>
+    </header>
+
+    <div class="shell">
+      <nav id="sidebar" class="sidebar">
+        <button class="nav-btn active" data-tab="game"><span>01</span><b>전투</b><small>성장의 연료</small></button>
+        <button class="nav-btn" data-tab="tree"><span>02</span><b>스킬 트리</b><small>게임의 본체</small></button>
+        <button class="nav-btn" data-tab="inventory"><span>03</span><b>장비</b><small>빌드 보조</small></button>
+        <button class="nav-btn" data-tab="records"><span>04</span><b>기록</b><small>발견과 업적</small></button>
+        <div class="side-card">
+          <span class="eyebrow">BUILD SCORE</span>
+          <strong id="buildScore">0</strong>
+          <div class="mini-bar"><i id="buildScoreBar"></i></div>
+          <small id="buildTitle">무명의 방랑자</small>
+        </div>
+        <button id="saveBtn" class="ghost-btn">저장</button>
+        <button id="resetBtn" class="danger-link">데이터 초기화</button>
+      </nav>
+
+      <main class="content">
+        <section id="tab-game" class="tab active">
+          <div class="section-head">
+            <div><span class="eyebrow">GROWTH RPG</span><h1>싸우고, 발견하고,<br><em>트리를 찢어발겨라.</em></h1></div>
+            <div class="level-ring"><span>LEVEL</span><b id="bigLevel">1</b></div>
+          </div>
+
+          <div class="game-grid">
+            <article class="panel region-panel">
+              <div class="panel-title"><span>지역</span><b id="regionName">속삭임 초원</b></div>
+              <div id="regionTabs" class="region-tabs"></div>
+              <div class="region-art">
+                <div class="region-orb"></div>
+                <div class="region-copy">
+                  <span id="regionLevel">권장 Lv.1+</span>
+                  <h2 id="regionTitle">속삭임 초원</h2>
+                  <p id="regionDesc">약한 마물과 부서진 유적이 흩어진 시작 지역.</p>
+                </div>
+              </div>
+              <div class="progress-label"><span>지역 정복도</span><b id="regionProgressText">0 / 5</b></div>
+              <div class="progress"><i id="regionProgressBar"></i></div>
+            </article>
+
+            <article class="panel combat-panel">
+              <div class="combat-top">
+                <div><span class="eyebrow" id="enemyTag">대기 중</span><h2 id="enemyName">탐험을 시작해라</h2></div>
+                <div id="enemyLevel" class="enemy-level">—</div>
+              </div>
+              <div class="enemy-stage">
+                <div id="enemySigil" class="enemy-sigil"><span>?</span></div>
+                <div id="damageFloatLayer" class="float-layer"></div>
+              </div>
+              <div class="bar-row enemy-bar-row"><span>ENEMY</span><div class="hp-bar"><i id="enemyHpBar"></i></div><b id="enemyHpText">—</b></div>
+              <div class="bar-row"><span>YOU</span><div class="hp-bar player"><i id="playerHpBar"></i></div><b id="playerHpText">100 / 100</b></div>
+              <div id="skillButtons" class="skill-buttons"></div>
+              <button id="battleBtn" class="primary-btn">탐험 시작</button>
+            </article>
+
+            <article class="panel stat-panel">
+              <div class="panel-title"><span>현재 빌드</span><b>전투 능력치</b></div>
+              <div id="statGrid" class="stat-grid"></div>
+              <div class="build-tags" id="buildTags"></div>
+            </article>
+
+            <article class="panel log-panel">
+              <div class="panel-title"><span>실시간 기록</span><b>전투 로그</b></div>
+              <div id="combatLog" class="combat-log"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="tab-tree" class="tab tree-tab">
+          <div class="tree-toolbar">
+            <div>
+              <span class="eyebrow">281 NODES / 10 PATHS</span>
+              <h2>초거대 스킬 트리</h2>
+            </div>
+            <div class="tree-legend">
+              <span><i class="dot normal"></i>일반 70%</span>
+              <span><i class="dot conditional"></i>조건부 20%</span>
+              <span><i class="dot secret"></i>비밀 10%</span>
+            </div>
+            <div class="tree-controls">
+              <button id="zoomOut" class="icon-btn">−</button>
+              <button id="centerTree" class="icon-btn">◎</button>
+              <button id="zoomIn" class="icon-btn">＋</button>
+            </div>
+          </div>
+          <div class="tree-layout">
+            <div id="treeViewport" class="tree-viewport">
+              <svg id="treeSvg" viewBox="-1200 -1200 2400 2400" aria-label="스킬 트리"></svg>
+              <div class="tree-hint">드래그 이동 · 휠/핀치 확대 · 노드 클릭</div>
+            </div>
+            <aside id="nodePanel" class="node-panel">
+              <div class="node-empty"><span>◈</span><b>노드를 선택해</b><small>트리에서 노드를 눌러 상세 정보를 확인할 수 있어.</small></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="tab-inventory" class="tab">
+          <div class="section-head compact"><div><span class="eyebrow">GEAR SUPPORT</span><h1>장비는 <em>빌드를 보조한다.</em></h1></div></div>
+          <div class="inventory-layout">
+            <article class="panel equipment-panel"><div class="panel-title"><span>장착 중</span><b>Equipment</b></div><div id="equipmentSlots" class="equipment-slots"></div></article>
+            <article class="panel"><div class="panel-title"><span>보유 장비</span><b>Inventory</b></div><div id="inventoryList" class="inventory-list"></div></article>
+          </div>
+        </section>
+
+        <section id="tab-records" class="tab">
+          <div class="section-head compact"><div><span class="eyebrow">DISCOVERY LOG</span><h1>네가 만든 <em>성장의 흔적.</em></h1></div></div>
+          <div class="records-grid">
+            <article class="panel"><div class="panel-title"><span>통계</span><b>Records</b></div><div id="recordStats" class="record-stats"></div></article>
+            <article class="panel"><div class="panel-title"><span>발견</span><b>Hidden Nodes</b></div><div id="discoveryList" class="discovery-list"></div></article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="toastLayer" class="toast-layer"></div>
+  <script src="game.js"></script>
+</body>
+</html>
